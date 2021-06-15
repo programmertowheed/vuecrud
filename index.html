@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue Crud</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+	<div class="container">
+	  	<div id="app">
+
+	  		<div class="head">
+	  			<div class="row p-3">
+	  				<div class="col-md-6"><h3 class="mb-0">All User</h3></div>
+	  				<div class="col-md-6 float-right"><div class="btn btn-primary float-right" @click="addModal = true">Add User</div></div>
+	  			</div>
+	  		</div>
+
+	  		<!-- Alert -->
+	  		<div v-if="successAlert" class="alert alert-success" role="alert">
+			  	{{ successMessage }}
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			    	<span aria-hidden="true" @click="successAlert = false">&times;</span>
+			  	</button>
+			</div>
+			<div v-if="errorAlert" class="alert alert-danger" role="alert">
+			  	{{ errorMessage }}
+			  	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			    	<span aria-hidden="true" @click="errorAlert = false">&times;</span>
+			  	</button>
+			</div>
+
+			<!-- Table -->
+		  	<table class="table">
+			  	<thead class="table-dark">
+			    	<tr>
+				      	<th scope="col">SL</th>
+				      	<th scope="col">Name</th>
+				      	<th scope="col">User Name</th>
+				      	<th scope="col">Email</th>
+				      	<th scope="col">Action</th>
+				    </tr>
+			  	</thead>
+			  	<tbody>
+			    	<tr v-for="user in users">
+				      	<th>{{ user.id }}</th>
+				      	<td>{{ user.username }}</td>
+				      	<td>{{ user.name }}</td>
+				      	<td>{{ user.email }}</td>
+				      	<td>
+				      		<span @click="setUpdateUser(user); updateModal = true" class="btn btn-info">Edit</span>
+				      		<span @click="deleteUser(user.id)" class="btn btn-danger">Delete</span>
+				      	</td>
+				    </tr>
+			  	</tbody>
+			</table>
+
+
+			
+			<!-- Add User Modal -->
+			<div v-if="addModal" class="form-modal">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title">Add User</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true" @click="addModal = false">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			       		<form>
+						  <div class="form-group">
+						    <label for="name">Name</label>
+						    <input v-model="form.name" type="text" class="form-control" id="name" placeholder="Enter name">
+						  </div>
+						  <div class="form-group">
+						    <label for="username">User name</label>
+						    <input v-model="form.username" type="text" class="form-control" id="username" placeholder="Enter username">
+						  </div>
+						  <div class="form-group">
+						    <label for="email">Email</label>
+						    <input v-model="form.email" type="email" class="form-control" id="email" placeholder="Enter email">
+						  </div>
+						  
+						  <span @click="addUser(); addModal = false" class="btn btn-primary">Add user</span>
+						</form>
+			      </div>
+			     
+			    </div>
+			</div>
+			
+			<!-- Update User Modal -->
+			<div v-if="updateModal" class="form-modal">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title">Update User</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true" @click="updateModal = false">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			       		<form>
+						  <div class="form-group">
+						    <label for="name">Name</label>
+						    <input v-model="update.name" type="text" class="form-control" id="name" placeholder="Enter name">
+						  </div>
+						  <div class="form-group">
+						    <label for="username">User name</label>
+						    <input v-model="update.username" type="text" class="form-control" id="username" placeholder="Enter username">
+						  </div>
+						  <div class="form-group">
+						    <label for="email">Email</label>
+						    <input v-model="update.email" type="email" class="form-control" id="email" placeholder="Enter email">
+						  </div>
+						  
+						  <span @click="updateUser(); updateModal = false" class="btn btn-primary">Update user</span>
+						</form>
+			      </div>
+			     
+			    </div>
+			</div>
+
+
+
+	  	</div>	
+	</div>
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="js/vue.js" type="text/javascript"></script>
+	<script src="js/axios.min.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+		
+		let app = new Vue({
+			el:"#app",
+			data:{
+				users: [],
+				form:{
+					name: null,
+					username: null,
+					email: null
+				},
+				update:{},
+				addModal: false,
+				updateModal: false,
+				successAlert: false,
+				successMessage: null,
+				errorAlert: false,
+				errorMessage: null
+			},
+			methods:{
+				getData: function(){
+					axios.get('http://localhost/vuecrud/api.php?action=read')
+					  .then((response) => {
+					  	if(!response.data.error){
+					  		this.users = response.data.users;
+					  	}else{
+					  		this.errorAlert = true;
+					  		this.errorMessage = response.data.message;
+					  	}
+					    
+					  })
+					  .catch((error) => {
+					    // handle error
+					    console.log(error);
+					  });
+				},
+				addUser: function(){
+					let formData = this.toFormData(this.form);
+					axios.post('http://localhost/vuecrud/api.php?action=create',formData)
+					  .then((response) => {
+					    if(!response.data.error){
+					    	this.form.name = null;
+					    	this.form.username = null;
+					    	this.form.email = null;
+					  		this.getData();
+					  		this.successAlert = true;
+					  		this.successMessage = response.data.message;
+					  	}else{
+					  		this.errorAlert = true;
+					  		this.errorMessage = response.data.message;
+					  	}
+					  })
+					  .catch((error) => {
+					    // handle error
+					    console.log(error);
+					  });
+				},
+				updateUser: function(){
+					let formData = this.toFormData(this.update);
+					axios.post('http://localhost/vuecrud/api.php?action=update',formData)
+					  .then((response) => {
+					    if(!response.data.error){
+					    	this.update.name = null;
+					    	this.update.username = null;
+					    	this.update.email = null;
+					  		this.getData();
+					  		this.successAlert = true;
+					  		this.successMessage = response.data.message;
+					  	}else{
+					  		this.getData();
+					  		this.errorAlert = true;
+					  		this.errorMessage = response.data.message;
+					  	}
+					  })
+					  .catch((error) => {
+					    // handle error
+					    console.log(error);
+					  });
+				},
+				deleteUser: function(id){
+					let formData = this.toFormData({id:id});
+					axios.post('http://localhost/vuecrud/api.php?action=delete',formData)
+					  .then((response) => {
+					    if(!response.data.error){
+					  		this.getData();
+					  		this.successAlert = true;
+					  		this.successMessage = response.data.message;
+					  	}else{
+					  		this.errorAlert = true;
+					  		this.errorMessage = response.data.message;
+					  	}
+					  })
+					  .catch((error) => {
+					    // handle error
+					    console.log(error);
+					  });
+				},
+				setUpdateUser: function(data){
+					this.update = data;
+				},
+
+				toFormData: function(obj){
+					let data = new FormData();
+					for(let key in obj){
+						data.append(key, obj[key]);
+					}
+					return data;
+				}
+			},
+			mounted: function(){
+				this.getData();
+			}
+		});
+	</script>
+</body>
+</html>
